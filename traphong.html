@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trả Phòng</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      margin: 0;
+      background-color: #f5f5f5;
+      overflow-x: hidden;
+    }
+
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      background: #2e2e2e;
+      color: white;
+      position: fixed;
+      padding-top: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s;
+      z-index: 1000;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar ul a {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      color: white;
+      text-decoration: none;
+      border-bottom: 1px solid #444;
+      font-size: 14px;
+      font-weight: 400;
+      transition: background 0.2s;
+    }
+
+    .sidebar ul a:hover {
+      background: #3d3d3d;
+    }
+
+    .menu-icon {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+      transition: margin-left 0.3s;
+    }
+
+    h1, h2 {
+      color: #333;
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      background: white;
+      padding: 15px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      padding: 8px;
+      margin-right: 8px;
+      margin-bottom: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .button {
+      background: linear-gradient(to bottom, #2ecc71, #27ae60);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 12px;
+      transition: background 0.3s;
+    }
+
+    .button:hover {
+      background: linear-gradient(to bottom, #27ae60, #219653);
+    }
+
+    .btn-filter, .btn-reset {
+      background: linear-gradient(to bottom, #2ecc71, #27ae60);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 12px;
+      transition: background 0.3s;
+    }
+
+    .btn-filter:hover, .btn-reset:hover {
+      background: linear-gradient(to bottom, #27ae60, #219653);
+    }
+
+    .table-container {
+      background: white;
+      padding: 10px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f8f8f8;
+      color: #333;
+      font-weight: 600;
+    }
+
+    td.text-ellipsis {
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .error-message, .success-message {
+      margin-top: 10px;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 14px;
+      animation: fadeIn 0.3s;
+      display: none;
+    }
+
+    .error-message {
+      background: #ffe6e6;
+      color: #e74c3c;
+    }
+
+    .success-message {
+      background: #e6ffed;
+      color: #2ecc71;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #666;
+      padding: 15px;
+      font-size: 14px;
+    }
+
+    .logout {
+      border-top: 1px solid #444;
+      margin-top: auto;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .table-container {
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 900px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <ul>
+      <a href="trangchu.html"><i class="fas fa-home menu-icon"></i>Trang Chủ</a>
+      <a href="quanlytaikhoan.html"><i class="fas fa-user-shield menu-icon"></i>Quản Lý Tài Khoản</a>
+      <a href="datphong.html"><i class="fas fa-bed menu-icon"></i>Đặt Phòng</a>
+      <a href="datphongonline.html"><i class="fas fa-globe menu-icon"></i>Đặt Phòng Online</a>
+      <a href="timkiemthongtin.html"><i class="fas fa-search menu-icon"></i>Tìm Kiếm Thông Tin</a>
+      <a href="nhanphong.html"><i class="fas fa-door-open menu-icon"></i>Nhận Phòng</a>
+      <a href="traphong.html"><i class="fas fa-door-closed menu-icon"></i>Trả Phòng</a>
+      <a href="dichvu.html"><i class="fas fa-concierge-bell menu-icon"></i>Dịch Vụ</a>
+      <a href="khachhang.html"><i class="fas fa-users menu-icon"></i>Khách Hàng</a>
+      <a href="xemdatphong.html"><i class="fas fa-calendar-check menu-icon"></i>Xem Đặt Phòng</a>
+      <a href="huydatphong.html"><i class="fas fa-calendar-times menu-icon"></i>Hủy Đặt Phòng</a>
+      <a href="giaphong.html"><i class="fas fa-money-bill menu-icon"></i>Giá Phòng</a>
+      <a href="doanhthu.html"><i class="fas fa-chart-line menu-icon"></i>Doanh Thu</a>
+      <a href="baocao.html"><i class="fas fa-file-alt menu-icon"></i>Báo Cáo</a>
+    </ul>
+    <ul class="logout">
+      <a href="dangnhap.html"><i class="fas fa-sign-out-alt menu-icon"></i>Đăng Xuất</a>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <h1>Quản Lý Trả Phòng</h1>
+    <div id="errorMessage" class="error-message"></div>
+    <div id="successMessage" class="success-message"></div>
+
+    <h2>Phòng Đang Sử Dụng</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Tên Khách</th>
+            <th>CCCD</th>
+            <th>Số Phòng</th>
+            <th>Loại Phòng</th>
+            <th>Ngày Đến</th>
+            <th>Ngày Đi</th>
+            <th>Số Điện Thoại</th>
+            <th>Email</th>
+            <th>Trạng Thái</th>
+            <th>Trả Phòng</th>
+          </tr>
+        </thead>
+        <tbody id="bookingData"></tbody>
+      </table>
+    </div>
+
+    <h2>Phòng Đã Trả</h2>
+    <div class="form-group">
+      <input type="date" id="tuNgay" placeholder="Từ ngày">
+      <input type="date" id="denNgay" placeholder="Đến ngày">
+      <button class="btn-filter" onclick="hienThiDaTra()">Lọc</button>
+      <button class="btn-reset" onclick="resetFilters()">Xóa Bộ Lọc</button>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Tên Khách</th>
+            <th>CCCD</th>
+            <th>Số Phòng</th>
+            <th>Loại Phòng</th>
+            <th>Ngày Đến</th>
+            <th>Ngày Đi</th>
+            <th>Số Điện Thoại</th>
+            <th>Email</th>
+            <th>Trạng Thái</th>
+            <th>Ngày Trả Phòng</th>
+          </tr>
+        </thead>
+        <tbody id="checkedOutData"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    let danhSachPhong = JSON.parse(localStorage.getItem("datPhong")) || [];
+
+    // Migrate old datPhong data
+    if (danhSachPhong.some(p => !p.soDienThoai || !p.email || !p.soPhong || !p.cccd)) {
+      danhSachPhong = danhSachPhong.map(p => ({
+        tenKhach: p.tenKhach || p.name || "Chưa cung cấp",
+        cccd: p.cccd || "Chưa cung cấp",
+        soDienThoai: p.soDienThoai || p.phone || "Chưa cung cấp",
+        email: p.email || "Chưa cung cấp",
+        loaiPhong: p.loaiPhong || "Chưa cung cấp",
+        soPhong: p.soPhong || "Chưa cung cấp",
+        ngayDen: p.ngayDen || "Chưa xác định",
+        ngayDi: p.ngayDi || "Chưa xác định",
+        trangThai: p.trangThai || "Đang chờ",
+        ngayTraPhong: p.ngayTraPhong
+      }));
+      localStorage.setItem("datPhong", JSON.stringify(danhSachPhong));
+      console.log(`[${new Date().toISOString()}] Đã chuyển đổi dữ liệu datPhong:`, danhSachPhong);
+    }
+
+    // Hàm hiển thị thông báo
+    function showMessage(message, isSuccess = false) {
+      const messageElement = isSuccess ? document.getElementById("successMessage") : document.getElementById("errorMessage");
+      messageElement.textContent = message;
+      messageElement.style.display = "block";
+      setTimeout(() => {
+        messageElement.style.display = "none";
+      }, 3000);
+    }
+
+    // Hàm hiển thị danh sách phòng đang sử dụng
+    function hienThiDanhSach() {
+      const tbody = document.getElementById("bookingData");
+      tbody.innerHTML = "";
+      let validBookings = 0;
+      let invalidBookings = 0;
+
+      if (!danhSachPhong.length) {
+        showMessage("Không có dữ liệu đặt phòng. Vui lòng kiểm tra ở trang Nhận Phòng hoặc Đặt Phòng.");
+        tbody.innerHTML = `<tr><td colspan="10" class="no-data">Không có dữ liệu đặt phòng. Vui lòng thêm booking ở trang Đặt Phòng.</td></tr>`;
+        console.log(`[${new Date().toISOString()}] Không có dữ liệu đặt phòng`);
+        return;
+      }
+
+      danhSachPhong.forEach((phong, index) => {
+        if (!phong.tenKhach || !phong.cccd || !phong.soDienThoai || !phong.email || !phong.loaiPhong || !phong.soPhong || !phong.trangThai) {
+          console.warn(`[${new Date().toISOString()}] Dữ liệu đặt phòng không hợp lệ:`, phong);
+          invalidBookings++;
+          return;
+        }
+        if (phong.trangThai === "Đã nhận") {
+          validBookings++;
+          tbody.innerHTML += `
+            <tr>
+              <td class="text-ellipsis">${phong.tenKhach}</td>
+              <td>${phong.cccd}</td>
+              <td>${phong.soPhong}</td>
+              <td>${phong.loaiPhong}</td>
+              <td>${phong.ngayDen}</td>
+              <td>${phong.ngayDi}</td>
+              <td>${phong.soDienThoai}</td>
+              <td class="text-ellipsis">${phong.email}</td>
+              <td>${phong.trangThai}</td>
+              <td><button class="button" onclick="traPhong(${index})"><i class="fas fa-door-closed"></i> Trả Phòng</button></td>
+            </tr>
+          `;
+        }
+      });
+
+      if (validBookings === 0 && danhSachPhong.length) {
+        tbody.innerHTML = `<tr><td colspan="10" class="no-data">Không tìm thấy booking với trạng thái Đã nhận.</td></tr>`;
+      }
+
+      console.log(`[${new Date().toISOString()}] Danh sách phòng (Đã nhận):`, { validBookings, invalidBookings });
+    }
+
+    // Hàm hiển thị danh sách phòng đã trả
+    function hienThiDaTra() {
+      const tuNgay = document.getElementById("tuNgay").value;
+      const denNgay = document.getElementById("denNgay").value;
+      const tbody = document.getElementById("checkedOutData");
+      tbody.innerHTML = "";
+      let validCheckedOut = 0;
+      let invalidCheckedOut = 0;
+
+      if (tuNgay && denNgay && new Date(tuNgay) > new Date(denNgay)) {
+        showMessage("Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc!");
+        tbody.innerHTML = `<tr><td colspan="10" class="no-data">Không có dữ liệu do lỗi ngày lọc.</td></tr>`;
+        console.log(`[${new Date().toISOString()}] Lỗi ngày lọc:`, { tuNgay, denNgay });
+        return;
+      }
+
+      if (!danhSachPhong.length) {
+        showMessage("Không có dữ liệu đặt phòng.");
+        tbody.innerHTML = `<tr><td colspan="10" class="no-data">Không có dữ liệu đặt phòng. Vui lòng thêm booking ở trang Đặt Phòng.</td></tr>`;
+        console.log(`[${new Date().toISOString()}] Không có dữ liệu đặt phòng`);
+        return;
+      }
+
+      danhSachPhong.forEach(phong => {
+        if (!phong.tenKhach || !phong.cccd || !phong.soDienThoai || !phong.email || !phong.loaiPhong || !phong.soPhong || !phong.trangThai) {
+          console.warn(`[${new Date().toISOString()}] Dữ liệu đặt phòng không hợp lệ:`, phong);
+          invalidCheckedOut++;
+          return;
+        }
+        if (phong.trangThai === "Đã trả" && phong.ngayTraPhong) {
+          const ngayTraPhong = new Date(phong.ngayTraPhong);
+          const tuNgayFilter = tuNgay ? new Date(tuNgay) : null;
+          const denNgayFilter = denNgay ? new Date(denNgay) : null;
+
+          if (
+            (!tuNgayFilter || ngayTraPhong >= tuNgayFilter) &&
+            (!denNgayFilter || ngayTraPhong <= denNgayFilter)
+          ) {
+            validCheckedOut++;
+            tbody.innerHTML += `
+              <tr>
+                <td class="text-ellipsis">${phong.tenKhach}</td>
+                <td>${phong.cccd}</td>
+                <td>${phong.soPhong}</td>
+                <td>${phong.loaiPhong}</td>
+                <td>${phong.ngayDen}</td>
+                <td>${phong.ngayDi}</td>
+                <td>${phong.soDienThoai}</td>
+                <td class="text-ellipsis">${phong.email}</td>
+                <td>${phong.trangThai}</td>
+                <td>${phong.ngayTraPhong}</td>
+              </tr>
+            `;
+          }
+        }
+      });
+
+      if (validCheckedOut === 0 && danhSachPhong.length) {
+        tbody.innerHTML = `<tr><td colspan="10" class="no-data">Không tìm thấy booking với trạng thái Đã trả trong khoảng thời gian này.</td></tr>`;
+      }
+
+      console.log(`[${new Date().toISOString()}] Danh sách phòng (Đã trả):`, { validCheckedOut, invalidCheckedOut });
+    }
+
+    // Hàm xóa bộ lọc
+    function resetFilters() {
+      document.getElementById("tuNgay").value = "";
+      document.getElementById("denNgay").value = "";
+      showMessage("Đã xóa bộ lọc!", true);
+      hienThiDaTra();
+    }
+
+    // Hàm trả phòng
+    function traPhong(index) {
+      const phong = danhSachPhong[index];
+      if (confirm(`Bạn có chắc chắn muốn trả phòng cho ${phong.tenKhach}?`)) {
+        danhSachPhong[index].trangThai = "Đã trả";
+        danhSachPhong[index].ngayTraPhong = new Date().toISOString().split("T")[0];
+        localStorage.setItem("datPhong", JSON.stringify(danhSachPhong));
+        showMessage(`Trả phòng thành công cho ${phong.tenKhach}!`, true);
+        console.log(`[${new Date().toISOString()}] Trả phòng thành công:`, phong);
+        hienThiDanhSach();
+        hienThiDaTra();
+      }
+    }
+
+    // Hiển thị cả hai danh sách khi trang được tải
+    window.onload = () => {
+      hienThiDanhSach();
+      hienThiDaTra();
+    };
+  </script>
+</body>
+</html>
